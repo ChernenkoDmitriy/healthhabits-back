@@ -5,6 +5,14 @@ import { UserAuthModule } from './user-auth/user-auth.module';
 import { UserModule } from './user/user.module';
 import { UserPlanModule } from './user-plan/user-plan.module';
 import { UserPlan } from './user-plan/user-plan.model';
+import { ExercisesModule } from './exercises/exercises.module';
+import { Exercise } from './exercises/exercises.model';
+import { EquipmentModule } from './equipment/equipment.module';
+import { Equipment } from './equipment/equipment.model';
+import { ExerciseEquipment } from './exercises/exercise-equipment.model';
+import { TrainingModule } from './training/training.module';
+import { Training } from './training/training.model';
+import { TrainingExercise } from './training/training-exercise.model';
 
 @Module({
   imports: [
@@ -19,13 +27,21 @@ import { UserPlan } from './user-plan/user-plan.model';
       database: process.env.POSTGRES_DB,
       models: [
         User,
-        UserPlan
+        UserPlan,
+        Training,
+        TrainingExercise,
+        Exercise,
+        ExerciseEquipment,
+        Equipment,
       ],
       autoLoadModels: true,
     }),
     UserModule,
     UserAuthModule,
     UserPlanModule,
+    ExercisesModule,
+    EquipmentModule,
+    TrainingModule,
   ],
   controllers: [],
   providers: [],

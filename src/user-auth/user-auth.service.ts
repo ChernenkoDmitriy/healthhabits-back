@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { PasswordUserAuthService } from './password-user-auth.service';
 import { User } from 'src/user/user.model';
-import { CreateUserDto } from 'src/user/dto/create.user.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class UserAuthService {

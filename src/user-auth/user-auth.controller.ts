@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { UserAuthService } from './user-auth.service';
-import { CreateUserDto } from 'src/user/dto/create.user.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @ApiTags('User-Authorization')
 @ApiBearerAuth()

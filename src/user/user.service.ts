@@ -1,9 +1,10 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create.user.dto';
-import { User } from './user.model';
 import { InjectModel } from '@nestjs/sequelize';
+import { User } from './user.model';
 import { FileStorageService } from 'src/file-storage/file-storage.service';
-import { UserPlanService } from 'src/user-plan/user-plan.service';
+import { UsersListDto } from './dto/users-list.dto';
+import { Op } from 'sequelize';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,30 +12,75 @@ export class UserService {
     constructor(
         @InjectModel(User) private userRepository: typeof User,
         private fileStorageService: FileStorageService,
-        private userPlanService: UserPlanService,
     ) { }
 
-    async getUserById(id: number) {
+    async create(dto: any) {
         try {
-            const user = await this.userRepository.findOne({
-                where: { id },
-                attributes: { exclude: ['createdAt', 'updatedAt'] },
-            });
-            return user;
+            const data = await this.userRepository.create(dto);
+            return data;
         } catch (error) {
-            console.warn('UserService -> getUserById: ', error);
+            console.error('UserService -> create: ', error);
             throw new HttpException(error, error.status);
         }
     }
 
-    async getUserByPhone(phone: string) {
+    async get(id: number) {
         try {
-            const user = await this.userRepository.findOne({ where: { phone } });
+            const user = await this.userRepository.findByPk(id, {
+                attributes: { exclude: ['password', 'updatedAt', 'createdAt', 'deleted'] }
+            });
+            if (!user) {
+                throw new HttpException('User not found', 404);
+            }
             return user;
         } catch (error) {
-            console.warn('UserService -> getUserByPhone: ', error);
+            console.warn('UserService -> getOne: ', error);
+            throw new HttpException(error.message, error.status);
+        }
+    }
+
+    async getUsers(dto: UsersListDto) {
+        try {
+            const users = await this.userRepository.findAndCountAll({
+                where: {
+                    [Op.or]: [
+                        { last_name: { [Op.like]: `%${dto?.search || ''}%` } },
+                        { first_name: { [Op.like]: `%${dto?.search || ''}%` } },
+                    ]
+                },
+                attributes: ['id', 'last_name', 'first_name', 'avatar',],
+                limit: dto?.limit || 20,
+                offset: dto?.offset || 0,
+            });
+            return { data: users.rows, total: users.count, offset: dto?.offset || 0, };
+        } catch (error) {
+            console.warn('UserService -> getUsers: ', error);
+            throw new HttpException(error.message, error.status);
+        }
+    }
+
+    async update(id: number, dto: UpdateUserDto) {
+        try {
+            const user = await this.userRepository.findByPk(id);
+            if (!user || user.deleted) {
+                throw new HttpException('User not found', 404);
+            }
+            await user.update(dto);
+            await user.save();
+            return await this.get(id);
+        } catch (error) {
+            console.error('UserService -> update: ', error);
             throw new HttpException(error, error.status);
         }
+    }
+
+    async delete(id: number) {
+        const user = await this.userRepository.findByPk(id);
+        if (!user || user.deleted) {
+            throw new HttpException('User not found', 404);
+        }
+        user.deleted = true;
+        await user.save();
     }
 
     async setUserAvatar(id: number, file: Express.Multer.File) {
@@ -55,15 +101,19 @@ export class UserService {
         }
     }
 
-    async create(dto: CreateUserDto) {
-        try {
-            const data = await this.userRepository.create(dto);
-            await this.userPlanService.create(data.id);
-            return data;
-        } catch (error) {
-            console.error('UserService -> create: ', error);
-            throw new HttpException(error, error.status);
+    async getProfile(id: number) {
+        const user = await this.userRepository.findByPk(id, {
+            attributes: ['id', 'last_name', 'first_name', 'avatar',],
+        });
+        if (!user) {
+            throw new HttpException('User not found', 404);
         }
+        return user;
+    }
+
+    async getUserByPhone(phone: string) {
+        const user = await this.userRepository.findOne({ where: { phone } });
+        return user;
     }
 
 }

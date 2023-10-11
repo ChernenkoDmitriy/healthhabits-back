@@ -31,6 +31,9 @@ export class User extends Model<User, UserCreationAttrs>{
     @Column({ type: DataType.STRING })
     password: string;
 
+    @Column({ type: DataType.BOOLEAN })
+    deleted: boolean;
+
     @BelongsTo(() => UserPlan, { foreignKey: 'user_id', onDelete: 'CASCADE' })
     user_plan: UserPlan;
 

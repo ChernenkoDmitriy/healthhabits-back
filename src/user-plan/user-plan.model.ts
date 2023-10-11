@@ -12,6 +12,9 @@ export class UserPlan extends Model<UserPlan, UserPlanCreationAttrs>{
     id: number;
 
     @Column({ type: DataType.INTEGER })
+    bmi: number;
+
+    @Column({ type: DataType.INTEGER })
     height: number;
 
     @Column({ type: DataType.INTEGER })
@@ -24,6 +27,9 @@ export class UserPlan extends Model<UserPlan, UserPlanCreationAttrs>{
     birthday: Date;
 
     // ---------------------------- About you ----------------------------
+
+    @Column({ type: DataType.ENUM('BEGINNER', 'INTERMEDIATE', 'ADVANCED'), allowNull: true })
+    current_fitness_level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
 
     @Column({ type: DataType.ENUM('LOSE_WEIGHT', 'BUILD_MUSCLE', 'IMPROVE_BODY', 'KEEP_FIT'), allowNull: true })
     goal: 'LOSE_WEIGHT' | 'BUILD_MUSCLE' | 'IMPROVE_BODY' | 'KEEP_FIT';
@@ -48,6 +54,9 @@ export class UserPlan extends Model<UserPlan, UserPlanCreationAttrs>{
 
     @Column({ type: DataType.STRING })
     average_training_time_week: string; // 1-2, 2-3, 3-4, 4-5, 5-6, 6-7
+
+    @Column({ type: DataType.INTEGER })
+    training_duration: number;
 
     @Column({ type: DataType.ENUM('SLOW', 'MEDIUM', 'FAST'), allowNull: true })
     tempo: 'SLOW' | 'MEDIUM' | 'FAST';

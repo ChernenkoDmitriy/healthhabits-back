@@ -7,6 +7,8 @@ dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('healthhabits');
+
   const config = new DocumentBuilder()
     .setTitle('Healthhabits')
     .setDescription('Documentation')
@@ -14,7 +16,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api/docs', app, document);
+  SwaggerModule.setup('/healthhabits/api/docs', app, document);
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe())

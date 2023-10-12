@@ -26,18 +26,18 @@ export class UserController {
     @Get('/profile')
     getProfile(@Req() req: any) {
         const user = req.user;
-        return this.userService.getProfile(Number(user.id));
+        return this.userService.get(Number(user.id));
     }
 
-    // @Get('/one/:id')
-    // get(@Param('id') id: number) {
-    //     return this.userService.get(Number(id));
-    // }
+    @Get('/one/:id')
+    get(@Param('id') id: number) {
+        return this.userService.get(Number(id));
+    }
 
-    // @Get('/list')
-    // getUsers(@Body() dto: UsersListDto) {
-    //     return this.userService.getUsers(dto);
-    // }
+    @Get('/list')
+    getUsers(@Body() dto: UsersListDto) {
+        return this.userService.getUsers(dto);
+    }
 
     @Delete()
     delete(@Req() req: any) {

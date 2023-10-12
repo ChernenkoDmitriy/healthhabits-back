@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Req } from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateTrainingDto } from './dto/update-training.dto';
@@ -17,9 +17,10 @@ export class TrainingController {
         return this.trainingService.create(createTrainingDto);
     }
 
-    @Get('/list')
-    findAll() {
-        return this.trainingService.findAll();
+    @Get('/user-list')
+    findUserList(@Req() req: any) {
+        const user = req.user;
+        return this.trainingService.findUserList(user.id);
     }
 
     @Get('/one/:id')

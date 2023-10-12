@@ -3,6 +3,7 @@ import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateTrainingDto } from './dto/update-training.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Training } from './training.model';
+import { UserTraining } from 'src/user-training/user-training.model';
 
 @Injectable()
 export class TrainingService {
@@ -21,8 +22,17 @@ export class TrainingService {
         }
     }
 
-    async findAll() {
-        return `This action returns all training`;
+    async findUserList(user_id: number) {
+        try {
+            const trainings = await this.trainingRepository.findAll({
+                attributes: { exclude: ['updatedAt', 'createdAt', 'deleted'] },
+                include: [{ model: UserTraining, where: { user_id }, attributes: [] }]
+            });
+            return trainings;
+        } catch (error) {
+            console.error('TrainingService -> findUserList: ', error);
+            throw new HttpException(error.message, error.status);
+        }
     }
 
     async findOne(id: number) {

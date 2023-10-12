@@ -1,6 +1,8 @@
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Exercise } from "src/exercises/exercises.model";
 import { TrainingExercise } from "./training-exercise.model";
+import { User } from "src/user/user.model";
+import { UserTraining } from "src/user-training/user-training.model";
 
 interface TrainingCreationAttrs {
     name: string;
@@ -26,5 +28,11 @@ export class Training extends Model<Training, TrainingCreationAttrs>{
 
     @BelongsToMany(() => Exercise, () => TrainingExercise)
     exercises: Exercise[];
+
+    @BelongsToMany(() => User, () => UserTraining)
+    users: User[];
+
+    @HasMany(() => UserTraining)
+    userTrainings: UserTraining[];
 
 }

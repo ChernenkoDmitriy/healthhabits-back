@@ -14,5 +14,6 @@ import { Exercise } from 'src/exercises/exercises.model';
         forwardRef(() => UserAuthModule),
         SequelizeModule.forFeature([Training, TrainingExercise, Exercise]),
     ],
+    exports: [TrainingService],
 })
 export class TrainingModule { }

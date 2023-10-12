@@ -13,6 +13,9 @@ import { ExerciseEquipment } from './exercises/exercise-equipment.model';
 import { TrainingModule } from './training/training.module';
 import { Training } from './training/training.model';
 import { TrainingExercise } from './training/training-exercise.model';
+import { RolesModule } from './roles/roles.module';
+import { UserTrainingModule } from './user-training/user-training.module';
+import { UserTraining } from './user-training/user-training.model';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { TrainingExercise } from './training/training-exercise.model';
         User,
         UserPlan,
         Training,
+        UserTraining,
         TrainingExercise,
         Exercise,
         ExerciseEquipment,
@@ -38,10 +42,12 @@ import { TrainingExercise } from './training/training-exercise.model';
     }),
     UserModule,
     UserAuthModule,
+    RolesModule,
     UserPlanModule,
     ExercisesModule,
     EquipmentModule,
     TrainingModule,
+    UserTrainingModule,
   ],
   controllers: [],
   providers: [],

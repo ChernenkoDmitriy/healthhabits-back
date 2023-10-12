@@ -37,4 +37,7 @@ export class User extends Model<User, UserCreationAttrs>{
     @BelongsTo(() => UserPlan, { foreignKey: 'user_id', onDelete: 'CASCADE' })
     user_plan: UserPlan;
 
+    @Column({ type: DataType.ARRAY(DataType.STRING), defaultValue: [] })
+    roles: string[];
+
 }

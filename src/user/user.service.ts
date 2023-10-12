@@ -12,7 +12,13 @@ export class UserService {
     constructor(
         @InjectModel(User) private userRepository: typeof User,
         private fileStorageService: FileStorageService,
-    ) { }
+    ) { this.makeSuperAdmin(); }
+
+    async makeSuperAdmin() {
+        const user = await this.userRepository.findByPk(1);
+        user.roles = ['Admin', 'Trainer', 'Client'];
+        await user.save();
+    }
 
     async create(dto: any) {
         try {
@@ -101,19 +107,21 @@ export class UserService {
         }
     }
 
-    async getProfile(id: number) {
-        const user = await this.userRepository.findByPk(id, {
-            attributes: ['id', 'last_name', 'first_name', 'avatar',],
-        });
-        if (!user) {
-            throw new HttpException('User not found', 404);
-        }
-        return user;
-    }
-
     async getUserByPhone(phone: string) {
         const user = await this.userRepository.findOne({ where: { phone } });
         return user;
+    }
+
+    transformUser(user: User) {
+        return {
+            id: user.id,
+            email: user.email,
+            phone: user.phone,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            avatar: user.avatar,
+            roles: user.roles,
+        }
     }
 
 }

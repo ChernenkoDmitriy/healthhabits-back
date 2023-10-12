@@ -31,7 +31,7 @@ jobs:
         port: 22
         script: |
           pm2 stop all
-          cd ~/server/application/healthhabits-back
+          cd server/application/healthhabits-back
           git pull origin main
           npm run build
           pm2 start all

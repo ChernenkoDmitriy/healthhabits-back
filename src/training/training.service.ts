@@ -4,17 +4,26 @@ import { UpdateTrainingDto } from './dto/update-training.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Training } from './training.model';
 import { UserTraining } from 'src/user-training/user-training.model';
+import { FileStorageService } from 'src/file-storage/file-storage.service';
 
 @Injectable()
 export class TrainingService {
 
     constructor(
         @InjectModel(Training) private trainingRepository: typeof Training,
+        private fileStorageService: FileStorageService,
     ) { }
 
-    async create(dto: CreateTrainingDto) {
+    async create(dto: CreateTrainingDto, file: Express.Multer.File) {
         try {
-            const training = await this.trainingRepository.create(dto);
+            const training = await this.trainingRepository.create({ name: dto.name });
+            if (file && training) {
+                const image = await this.fileStorageService.uploadFile(file);
+                if (image) {
+                    training.image = image.name;
+                    await training.save();
+                }
+            }
             return this.findOne(training.id);
         } catch (error) {
             console.error('TrainingService -> create: ', error);

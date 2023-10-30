@@ -38,7 +38,7 @@ export class FileStorageService {
     async uploadFile(file: Express.Multer.File) {
         try {
             const imageS3 = await this.sendToS3(file);
-            return { status: imageS3.status, name: 'http://localhost:4000/file-storage/' + imageS3.name };
+            return { status: imageS3.status, name: 'http://localhost:4002/healthhabits/file-storage/' + imageS3.name };
         } catch (error) {
             throw new HttpException(error.message, error.status || 400);
         }

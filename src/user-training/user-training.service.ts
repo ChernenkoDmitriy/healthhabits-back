@@ -12,9 +12,9 @@ export class UserTrainingService {
         private trainingService: TrainingService,
     ) { }
 
-    async create(dto: CreateUserTrainingDto, user_id: number) {
+    async create(dto: CreateUserTrainingDto, file: Express.Multer.File, user_id: number) {
         try {
-            const training = await this.trainingService.create(dto);
+            const training = await this.trainingService.create(dto, file);
             await this.userTrainingRepository.create({ training_id: training.id, user_id });
             return training;
         } catch (error) {

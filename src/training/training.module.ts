@@ -6,6 +6,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Training } from './training.model';
 import { TrainingExercise } from './training-exercise.model';
 import { Exercise } from 'src/exercises/exercises.model';
+import { FileStorageModule } from 'src/file-storage/file-storage.module';
 
 @Module({
     controllers: [TrainingController],
@@ -13,6 +14,7 @@ import { Exercise } from 'src/exercises/exercises.model';
     imports: [
         forwardRef(() => UserAuthModule),
         SequelizeModule.forFeature([Training, TrainingExercise, Exercise]),
+        FileStorageModule,
     ],
     exports: [TrainingService],
 })

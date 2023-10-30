@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Put, Req, UploadedFile } from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateTrainingDto } from './dto/update-training.dto';
@@ -13,8 +13,8 @@ export class TrainingController {
     constructor(private readonly trainingService: TrainingService) { }
 
     @Post()
-    create(@Body() createTrainingDto: CreateTrainingDto) {
-        return this.trainingService.create(createTrainingDto);
+    create(@Body() dto: CreateTrainingDto, @UploadedFile() file: Express.Multer.File) {
+        return this.trainingService.create(dto, file);
     }
 
     @Get('/user-list')
